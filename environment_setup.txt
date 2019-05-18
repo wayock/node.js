@@ -1,0 +1,39 @@
+1. What is npm and what does it do?
+
+NPM stands for Node.js Package Manager.  A package is a set of files constituting a tool you can
+include in your application.  Packages are the building blocks of an application.  Packages help to
+improve the functionality of the application.  Dependency management is another essential feature of
+NPM.  Because some packages depend on other packages to ensure the proper working of the application,
+NPM helps in managing these dependencies.  NPM makes it easy for JavaScript developers to share the
+code they've created to solve particular sets of problems, and for other developers to reuse that code
+in their applications.
+
+
+
+2. What kind of information does package.json hold?
+
+package.json is a file that communicates to nom how the application is structured.  The following is an
+example of the type of information that is included:
+
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "demo"
+  ],
+  "author": "Matthew Wayock",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.0"
+  }
+}
+
+
+3. Google another Node package. Using the demo directory run npm install <theNameOfThePackage> --save.
+Check the contents of your package.json file to make sure that the dependencies list the name of the
+Node package.
