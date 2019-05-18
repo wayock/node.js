@@ -37,3 +37,24 @@ example of the type of information that is included:
 3. Google another Node package. Using the demo directory run npm install <theNameOfThePackage> --save.
 Check the contents of your package.json file to make sure that the dependencies list the name of the
 Node package.
+
+npm install grunt --save
+
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "demo"
+  ],
+  "author": "Matthew Wayock",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.0",
+    "grunt": "^1.0.4"
+  }
+}
