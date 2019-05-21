@@ -1,0 +1,27 @@
+1. Why is the fs core module important for Node development?
+
+fs is Node's built-in module (short for file system).  fs is important because serve-side languages must
+provide a way to access the file system through code.  fs accomplishes this task for Node.
+
+
+2. What is the difference between sync and non-sync methods in the fs module?
+
+sync: synchronous or blocking, means that your code runs in sequential order.  The program waits for the
+line of code to finish executing before moving on to the next line of code.
+
+non-sync: asynchronous or non-blocking, means your code does not wait for the current line to execute before
+moving on to run the next line.
+
+
+3. Why are modules used?
+
+Module is the name for libraries in Node.  Modules are libraries, mainly pieces of code, that are imported
+into a file.  Modules are used as a way to access and include external libraries into Node.  CommonJS is
+a core library in Node.
+
+
+4. Why are libraries such as fs used in Node programming?
+
+Libraries such as fs provide increased functionality in Node programming. Some common uses of fs are
+read, create, update, delete, rename and upload files.  Using a good library is useful because you
+can utilize code created and tested by good developers and is maintained by a community.  
