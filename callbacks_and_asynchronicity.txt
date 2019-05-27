@@ -1,0 +1,127 @@
+Questions
+1. What is the difference between readdirSync and readdir?
+
+    readdirSync is a synchronous function.  This means that while the readdirSync function is on the call stack
+    is will block any other functions from running.  Blocking means that this function needs to finish executing
+    before the next function on the call stack executes.
+
+    readdir is an asynchronous function.  This means that the readdir functions is called on the call stack
+    and since it will take awhile to execute, it is sent to the the thread pool.  While it is executing in
+    the thread pool, the call stack is able to execute the next function on the call stack.  Since the call
+    stack is able to execute that next function without waiting for the readdir function to finish, it is
+    considered non-blocking.  When readdir finishes executing in the thread pool it is sent to the callback queue.
+    While in the callback queue it waits for the call stack to be cleared.  Once the call stack is cleared, the
+    event loop will send the first item in the callback queue to the call stack.
+
+
+2. What is the event loop and how does it handle asynchronous requests?
+
+The event loop sends the first item in the callback queue to the call stack when the call stack is empty.
+After it sends the first item in the callback queue, it will wait until the call stack is empty again.  Once it
+is empty again it will send the next item in the callback queue to the call stack. It will repeat this process
+until the callback queue is empty.
+
+
+
+3. Given the following code, specify whether the program is asynchronous and non-blocking or synchronous
+and blocking or synchronous and non-blocking.
+
+const fs = require('fs');
+const file = fs.readFileSync('foo.txt');
+console.log(file.toString());
+
+The code above is synchronous and non-blocking.  It is first reading the text in one file and then
+console.logging the text of the file to the terminal.  Even though it is synchronous, since the function
+doesn't take that long to run, it is non-blocking.
+
+
+
+4. Given the following code, specify whether the program is asynchronous and non-blocking or synchronous
+and blocking or synchronous and non-blocking.
+
+const fs = require('fs');
+fs.readFile('foo.txt', (err, file) => {
+ if (err) throw err;
+ console.log(file.toString());
+});
+console.log("test");
+
+The above code is asynchronous.
+
+
+5. In what order will the console.log statements execute in the code below?
+
+const fs = require('fs');
+fs.readFile('foo.txt', (err, file) => {
+ if (err) throw err;
+ console.log("A");
+ console.log("B")
+});
+console.log("C");
+
+The order of execution is:
+    1. console.log("C");
+    2. console.log("A");
+    3. console.log("B")
+
+
+6. setTimeout is a JavaScript function which calls a function after a set amount of milliseconds.
+Given the following code, explain in what sequence the functions will run and why.
+
+function greeting() {
+ setTimeout(() => {
+   console.log("friend");
+ }, 100);
+}
+
+function hello(){
+ console.log("hello");
+}
+
+greeting();
+hello();
+
+
+In the console it will print:
+  "hello"
+  "friend"
+
+This is the case even though greeting() is called first.  Because greeting() has a delay (even though it
+is only milliseconds) it gets sent from the call stack to the thread pool, after the specified time it will
+get sent to the callback queue.  Meanwhile, hello() becomes the next item on the call stack.  Once greeting()
+is sent to the pool thread, hello() executes on the call stack. greeting() gets sent from the thread pull to
+the callback queue almost instantly but the event loop waits until the call stack is empty (in this case
+after hello() executes) until it sends the next item up in the callback queue to the call stack.
+
+
+7. Create a function which utilizes a callback. Make sure to add console.log statements to understand when
+your callback function is called.
+
+In input.txt
+
+    Writing and testing an asynchronous callback function.
+
+
+In main.js
+
+    var fs = require("fs");
+
+    fs.readFile('input.txt', function (err, data) {
+       if (err) return console.error(err);
+       console.log(data.toString());
+    });
+
+    console.log("The first shall be last!");
+
+
+In terminal:
+
+    Matthews-MacBook-Pro:node.js wayock$ node main.js
+    The first shall be last!
+    Writing and testing an asynchronous callback function.
+
+
+/* Helpful Links
+    Visualize the event loop and callbacks http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D
+    Node.js Callbacks Concept https://www.tutorialspoint.com/nodejs/nodejs_callbacks_concept.htm
+*/
